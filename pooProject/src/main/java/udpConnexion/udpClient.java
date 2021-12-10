@@ -12,7 +12,7 @@ public class udpClient {
 		DatagramSocket client = new DatagramSocket();
 		
 		// Créer le message composé du pseudo et de l'adresse ip locale
-		String str = localUser.pseudo + (localUser.add).toString();
+		String str = localUser.pseudo + " " + (localUser.add).getHostAddress();
 		
 		// declaration des buffer pour avoir la longueur du datagramme
 		byte[] buf = str.getBytes();
