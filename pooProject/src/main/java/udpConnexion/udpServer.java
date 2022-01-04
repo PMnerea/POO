@@ -4,7 +4,7 @@ import java.io.*;
 import java.net.*; 
 
 public class udpServer {
-	public static void main(String[] args) throws IOException {
+	public static String main(String[] args) throws IOException {
 		// le client est sur le port 4999
 		DatagramSocket server = new DatagramSocket(4999);
 		
@@ -22,5 +22,7 @@ public class udpServer {
 		// fermeture de la boucle
 		
 		server.close();
+		
+		return reponse;
 	}
 }
