@@ -2,55 +2,67 @@ package udpConnexion;
 
 import java.io.IOException;
 import java.net.*;
+import Manager.Manager;
 import reseau.Reseau;
 import user.User;
 
-public class udpClient {
-	// Envoi monocast : quand on reçois la premiere question on repond qui on est
-	public static void userDiscoverResponse(InetAddress distantAddress, User localUser) throws IOException {
-		// declaration du client et de son adresse IP
-		DatagramSocket client = new DatagramSocket();
-		
-		// Créer le message composé du pseudo et de l'adresse ip locale
-		String str = localUser.pseudo + " " + (localUser.add).getHostAddress();
-		
-		// declaration des buffer pour avoir la longueur du datagramme
-		byte[] buf = str.getBytes();
-		// on prend le port 4999 pcq le 5000 on va l'utiliser pour tcp
-		DatagramPacket p = new DatagramPacket(buf, buf.length, distantAddress, 4999);
-		
-		// envoi du packet udp cree juste avant
-		client.send(p);
-				
-		client.close();
+public class udpClient extends Thread {
+	
+	public boolean updConnected;
+	// Declaration utilisateur local
+	User localUser;
+	// Declaration pour le setup des interfaces
+	DatagramSocket client;
+	InterfaceAddress ia;
+	InetAddress add;
+	String str;
+	DatagramPacket p;
+	byte[] buf;
+	
+	public udpClient() {
+		this.updConnected = true;
+		this.localUser = Manager.localUser;
+		System.out.println(Manager.localUser.pseudo);
+		try {
+			this.client = new DatagramSocket();
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.ia = Reseau.findAddresses();
+		this.add = ia.getBroadcast();
 	}
 	
-	// Envoi broadcast : chaque x secondes on envoie nos infos pour dire qu'on est co
-	// Quand on est utilisateur distant, si cet utilisateur n'est pas encore dans la liste on l'ajoute et renvoie info en monocast
-	public static void sendInfo(User localUser) throws IOException {
-		// declaration du client et de son adresse IP
-		DatagramSocket client = new DatagramSocket();
-		InterfaceAddress ia = Reseau.findAddresses();
-		InetAddress add = ia.getBroadcast();
-		
-						
-		// Créer le message composé du pseudo et de l'adresse ip locale
-		String str = localUser.pseudo + " " + (localUser.add).getHostAddress();
-						
-		// declaration des buffer pour avoir la longueur du datagramme
-		byte[] buf = str.getBytes();
-		// on prend le port 4999 pcq le 5000 on va l'utiliser pour tcp
-		DatagramPacket p = new DatagramPacket(buf, buf.length, add, 4999);
-						
-		// envoi du packet udp cree juste avant
-		client.send(p);
+	public void run() {
+		try {			
+			while(this.updConnected) {
+				// Créer le message composé du pseudo et de l'adresse ip locale
+				this.str = this.localUser.pseudo + " " + (this.localUser.add).getHostAddress();
 								
-		client.close();
+				// declaration des buffer pour avoir la longueur du datagramme
+				this.buf = str.getBytes();
+				
+				// on prend le port 4999 pcq le 5000 on va l'utiliser pour tcp
+				this.p = new DatagramPacket(buf, buf.length, add, 4999);
+								
+				// envoi du packet udp cree juste avant
+				client.send(p);
+				
+				try {
+					Thread.sleep(10000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+			client.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void main(String[] args) throws IOException {
-		String testName = "toto";
-		User testUser = User.initLocalUser(testName);
-		sendInfo(testUser);
+		
 	}
 }

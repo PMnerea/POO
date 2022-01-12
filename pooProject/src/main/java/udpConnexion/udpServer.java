@@ -2,7 +2,7 @@ package udpConnexion;
 
 import java.io.*; 
 import java.net.*;
-
+import java.util.ArrayList;
 import Manager.Manager; 
 
 public class udpServer extends Thread {
@@ -37,9 +37,10 @@ public class udpServer extends Thread {
 				String pseudo = res[0];
 				InetAddress add = InetAddress.getByName(res[1]);
 				
-				addUserDB(pseudo, add);
-				
-				System.out.println("Reponse Data : " + reponse);
+				ArrayList<String> allUsers = Manager.getAllUsersConnected();
+				if (!allUsers.contains(pseudo)) {
+					addUserDB(pseudo, add);
+				}
 			}
 			server.close();
 		} catch (IOException e) {
