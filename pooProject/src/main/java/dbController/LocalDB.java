@@ -8,7 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+ 
 public class LocalDB {
 
 	// Attributes 
@@ -53,8 +53,9 @@ public class LocalDB {
 								 "`pseudo` VARCHAR(45) NOT NULL," +
 								 "`ipAddress` VARCHAR(45) NOT NULL," +
 								 "PRIMARY KEY (`idUser`)," +
-								 "UNIQUE INDEX `idUser_UNIQUE` (`idUser` ASC) VISIBLE," +
-								 "UNIQUE INDEX `pseudo_UNIQUE` (`pseudo` ASC) VISIBLE);";
+								 "UNIQUE INDEX `idUser_UNIQUE` (`idUser` ASC) VISIBLE, " +
+								 "UNIQUE INDEX `pseudo_UNIQUE` (`pseudo` ASC) VISIBLE, " +
+								 "UNIQUE INDEX `ipAddress_UNIQUE` (`ipAddress` ASC) VISIBLE);";
 				
 				System.out.println("[LocalDB] Creating the table...");
 				this.statement.executeUpdate(query) ;
@@ -83,6 +84,10 @@ public class LocalDB {
 				if (rs.next()) {
 					int id = rs.getInt(1) + 1;
 					String query = "INSERT INTO poo.users (idUser, pseudo, ipAddress) VALUES (" + id + ", '" + pseudo + "', '" + ipAdd + "') ;" ; 
+					this.statement.executeUpdate(query) ;
+				}
+				else {
+					String query = "INSERT INTO poo.users (idUser, pseudo, ipAddress) VALUES (" + 0 + ", '" + pseudo + "', '" + ipAdd + "') ;" ; 
 					this.statement.executeUpdate(query) ;
 				}
 				System.out.println("[LocalDB] User added");
