@@ -14,10 +14,6 @@ public class LocalDB {
 	// Attributes 
 		Connection connection = null ; 
 		Statement statement ;
-		static String databaseName = "";
-		String addrDb = "jdbc:mysql://localhost:3307" + databaseName;
-		String login = "root" ;
-		String password = "dad$root" ;
 		
 		// ======================= CONNEXION =========================
 		
@@ -28,7 +24,7 @@ public class LocalDB {
 			// Load the driver class file 
 			try {
 				System.out.println("[LocalDB] Loading the driver class file");
-				Class.forName("com.mysql.cj.jdbc.Driver") ; 
+				Class.forName("org.sqlite.JDBC") ; 
 			} 
 			catch (ClassNotFoundException e) {
 				System.out.println("Error while loading the driver class file" + e) ; 
@@ -37,7 +33,7 @@ public class LocalDB {
 			try {
 				// Make a database connection
 				System.out.println("[LocalDB] Database connection...");
-				this.connection = DriverManager.getConnection(this.addrDb, this.login, this.password);
+				this.connection = DriverManager.getConnection("jdbc:sqlite:test.db");
 				System.out.println("[LocalDB] Database connected");
 				
 				// Create a statement object
@@ -48,14 +44,11 @@ public class LocalDB {
 
 				
 				// Execute the statement 			
-				String query = " CREATE TABLE IF NOT EXISTS `poo`.`users` ( " +
+				String query = " CREATE TABLE IF NOT EXISTS `users`( " +
 								 "`idUser` INT NOT NULL," +
 								 "`pseudo` VARCHAR(45) NOT NULL," +
 								 "`ipAddress` VARCHAR(45) NOT NULL," +
-								 "PRIMARY KEY (`idUser`)," +
-								 "UNIQUE INDEX `idUser_UNIQUE` (`idUser` ASC) VISIBLE, " +
-								 "UNIQUE INDEX `pseudo_UNIQUE` (`pseudo` ASC) VISIBLE, " +
-								 "UNIQUE INDEX `ipAddress_UNIQUE` (`ipAddress` ASC) VISIBLE);";
+								 "PRIMARY KEY (`idUser`));";
 				
 				System.out.println("[LocalDB] Creating the table...");
 				this.statement.executeUpdate(query) ;
@@ -76,18 +69,18 @@ public class LocalDB {
 		public void addUser(String pseudo, InetAddress ipAdd) {
 			System.out.println("[LocalDB] Adding a user in the table...");
 			
-			String aux = "SELECT idUser FROM poo.users ORDER BY idUser DESC LIMIT 1;";
+			String aux = "SELECT idUser FROM users ORDER BY idUser DESC LIMIT 1;";
 			
 			try {
 				// Recuperer l'id
 				ResultSet rs = this.statement.executeQuery(aux);
 				if (rs.next()) {
 					int id = rs.getInt(1) + 1;
-					String query = "INSERT INTO poo.users (idUser, pseudo, ipAddress) VALUES (" + id + ", '" + pseudo + "', '" + ipAdd + "') ;" ; 
+					String query = "INSERT INTO users (idUser, pseudo, ipAddress) VALUES (" + id + ", '" + pseudo + "', '" + ipAdd + "') ;" ; 
 					this.statement.executeUpdate(query) ;
 				}
 				else {
-					String query = "INSERT INTO poo.users (idUser, pseudo, ipAddress) VALUES (" + 0 + ", '" + pseudo + "', '" + ipAdd + "') ;" ; 
+					String query = "INSERT INTO users (idUser, pseudo, ipAddress) VALUES (" + 0 + ", '" + pseudo + "', '" + ipAdd + "') ;" ; 
 					this.statement.executeUpdate(query) ;
 				}
 				System.out.println("[LocalDB] User added");
@@ -102,7 +95,7 @@ public class LocalDB {
 		public void deleteUser(String pseudo) {
 			System.out.println("[LocalDB] Deleting user...");
 			
-			String query = "DELETE FROM poo.users WHERE pseudo = '" + pseudo + "';";
+			String query = "DELETE FROM users WHERE pseudo = '" + pseudo + "';";
 			
 			try {
 				this.statement.executeUpdate(query);
@@ -122,7 +115,7 @@ public class LocalDB {
 			
 			String IP = ipAdd.toString();
 			
-			String query = "SELECT pseudo FROM poo.users WHERE ipAddress = '" + IP + "' ;"; 
+			String query = "SELECT pseudo FROM users WHERE ipAddress = '" + IP + "' ;"; 
 			
 			try {
 				ResultSet rs = this.statement.executeQuery(query);
@@ -149,7 +142,7 @@ public class LocalDB {
 		public InetAddress getUserByPseudo(String pseudo) {
 			System.out.println("[LocalDB] Getting user by his pseudo");
 			
-			String query = "SELECT ipAddress FROM poo.users WHERE pseudo = '" + pseudo + "' ;"; 
+			String query = "SELECT ipAddress FROM users WHERE pseudo = '" + pseudo + "' ;"; 
 			
 			try {
 				ResultSet rs = this.statement.executeQuery(query);
@@ -184,7 +177,7 @@ public class LocalDB {
 		public ArrayList<String> getAllPseudos() {
 			System.out.println("[LocalDB] Getting all users connected");
 			
-			String query = "SELECT pseudo FROM poo.users";
+			String query = "SELECT pseudo FROM users";
 			
 			ArrayList<String> pseudos = new ArrayList<String>() ;
 			
@@ -209,7 +202,7 @@ public class LocalDB {
 		public void updatePseudo(int id, String newPseudo) {
 			System.out.println("[LocalDB] Updating pseudo...");
 			
-			String query = "UPDATE poo.users SET pseudo = '" + newPseudo + "' WHERE idUser = " + id + ";";
+			String query = "UPDATE users SET pseudo = '" + newPseudo + "' WHERE idUser = " + id + ";";
 			
 			try {
 				this.statement.executeUpdate(query);
@@ -225,7 +218,7 @@ public class LocalDB {
 		public void updateIp(int id, InetAddress newAdd) {
 			System.out.println("[LocalDB] Updating IP address...");
 			
-			String query = "UPDATE poo.users SET ipAddress = '" + newAdd + "' WHERE idUser = " + id + ";";
+			String query = "UPDATE users SET ipAddress = '" + newAdd + "' WHERE idUser = " + id + ";";
 			
 			try {
 				this.statement.executeUpdate(query);
@@ -244,7 +237,7 @@ public class LocalDB {
 			try {
 				add = InetAddress.getLocalHost();
 				LocalDB localDB = new LocalDB() ;
-				//localDB.addUser("juju", add);
+				localDB.addUser("juju", add);
 				String resPseudo = localDB.getUserByIp(add);
 				InetAddress resIp = localDB.getUserByPseudo("juju");
 				System.out.println(resPseudo);
