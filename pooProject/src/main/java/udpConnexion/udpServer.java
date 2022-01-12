@@ -1,28 +1,46 @@
 package udpConnexion;
 
 import java.io.*; 
-import java.net.*; 
+import java.net.*;
 
-public class udpServer {
-	public static String main(String[] args) throws IOException {
-		// le client est sur le port 4999
-		DatagramSocket server = new DatagramSocket(4999);
+import Manager.Manager; 
+
+public class udpServer extends Thread {
+	
+	boolean updConnected;
+	
+	public udpServer() {
+		this.updConnected = true;
+	}
+	
+	public void addUserDB(String pseudo, InetAddress add) {
+		Manager.addUserToDB(pseudo, add);
+	}
+	
+	public void run() {
+		try {
+			// le client est sur le port 4999
+			DatagramSocket server = new DatagramSocket(4999);
+			
+			// while(app pas fermée) 
+			byte[] buf = new byte[256];
+			
+			while (this.updConnected) {			
+				// creation du packet datagramme
+				DatagramPacket packet = new DatagramPacket(buf, buf.length);
+				
+				// reception de packets
+				server.receive(packet);
+				String reponse = new String(packet.getData());
+				System.out.println("Reponse Data : " + reponse);
+			}
+			server.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
 		
-		// Mettre cette partie dans une boucle qui commence au démarrage de l'application et se ferme si on éteint l'application
-		// while(app pas fermée) 
-		byte[] buf = new byte[256];
-		
-		// creation du packet datagramme
-		DatagramPacket packet = new DatagramPacket(buf, buf.length);
-		
-		// reception de packets
-		server.receive(packet);
-		String reponse = new String(packet.getData());
-		System.out.println("Reponse Data : " + reponse);
-		// fermeture de la boucle
-		
-		server.close();
-		
-		return reponse;
 	}
 }
