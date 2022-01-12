@@ -32,6 +32,13 @@ public class udpServer extends Thread {
 				// reception de packets
 				server.receive(packet);
 				String reponse = new String(packet.getData());
+				
+				String[] res = reponse.split(" ");
+				String pseudo = res[0];
+				InetAddress add = InetAddress.getByName(res[1]);
+				
+				addUserDB(pseudo, add);
+				
 				System.out.println("Reponse Data : " + reponse);
 			}
 			server.close();
