@@ -22,7 +22,6 @@ public class udpClient extends Thread {
 	public udpClient() {
 		this.updConnected = true;
 		this.localUser = Manager.localUser;
-		System.out.println(Manager.localUser.pseudo);
 		try {
 			this.client = new DatagramSocket();
 		} catch (SocketException e) {
@@ -33,11 +32,15 @@ public class udpClient extends Thread {
 		this.add = ia.getBroadcast();
 	}
 	
+	public void stopClient() {
+		this.updConnected = false;
+	}
+	
 	public void run() {
 		try {			
 			while(this.updConnected) {
 				// Créer le message composé du pseudo et de l'adresse ip locale
-				this.str = this.localUser.pseudo + " " + (this.localUser.add).getHostAddress();
+				this.str = this.localUser.pseudo + " " + (this.localUser.add).getHostAddress() + " _";
 								
 				// declaration des buffer pour avoir la longueur du datagramme
 				this.buf = str.getBytes();
