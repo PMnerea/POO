@@ -30,6 +30,8 @@ public class ChangePseudo {
 	private final JLabel tooLongFormat = new JLabel();
 	private final JLabel alreadyUsed = new JLabel();
 	
+	static boolean changePseudoVisible = true;
+	
 	public ChangePseudo() {
 		// Creation de la fenetre
 		changePseudoFrame = new JFrame("Messagerie | changePseudo page");
@@ -66,8 +68,9 @@ public class ChangePseudo {
             			    if (!m.find()) {
             			    	if (!allUsers.contains(pseudoText)) {
             			    		Manager.updatePseudo(Manager.currentPseudo(), pseudoText);
-            			    		// Rendre home page visible
-            			    		changePseudoFrame.setVisible(false);
+            			    		new HomePage();
+            			    		changePseudoVisible = false;
+            			    		changePseudoFrame.setVisible(changePseudoVisible);
             			    	}
             			    	else {
             			    		alreadyUsed.setText("<html><body><font color='red'>This pseudo is already used by an other user...</body></html>");
@@ -94,7 +97,7 @@ public class ChangePseudo {
 		changePseudoPanel.add(alreadyUsed);
 		
 		changePseudoFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		changePseudoFrame.setVisible(true);
+		changePseudoFrame.setVisible(changePseudoVisible);
 	}
 	
 	public static void main(String[] args) {

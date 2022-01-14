@@ -32,6 +32,12 @@ public class Manager {
 		//runUDPdeco();
 	}
 	
+	public static void stopApp() {
+		deleteAllUsersFromDB();
+		
+		stopServers();
+	}
+	
 	// ========================== INIT USER ==================================
 	
 	public static User initUser(String p) {
@@ -60,6 +66,10 @@ public class Manager {
 	
 	public static void updatePseudo(String p, String np) {
 		localDB.updatePseudo(p, np);
+	}
+	
+	public static void deleteAllUsersFromDB() {
+		localDB.deleteAllUser();
 	}
 	
 	// ========================== GESTION SERVERS ============================
@@ -99,6 +109,5 @@ public class Manager {
 	// ========================= LANCEMENT APPLICATION =======================
 	
 	public static void main(String[] args) {
-		
 	}
 }

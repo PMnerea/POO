@@ -92,6 +92,8 @@ public class LocalDB {
 		}
 		
 		// ============================== DELETE ==============================
+		
+		// Delete one user by his pseudo
 		public void deleteUser(String pseudo) {
 			System.out.println("[LocalDB] Deleting user...");
 			
@@ -100,6 +102,22 @@ public class LocalDB {
 			try {
 				this.statement.executeUpdate(query);
 				System.out.println("[LocalDB] User deleted");
+				System.out.println(" ================================= ");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		// Delete all user
+		public void deleteAllUser() {
+			System.out.println("[LocalDB] Deleting all users...");
+			
+			String query = "DELETE FROM users;";
+			
+			try {
+				this.statement.executeUpdate(query);
+				System.out.println("[LocalDB] All users deleted");
 				System.out.println(" ================================= ");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -202,7 +220,7 @@ public class LocalDB {
 		public void updatePseudo(String pseudo, String newPseudo) {
 			System.out.println("[LocalDB] Updating pseudo...");
 			
-			String query = "UPDATE users SET pseudo = '" + newPseudo + "' WHERE pseudo = " + pseudo + ";";
+			String query = "UPDATE users SET pseudo = '" + newPseudo + "' WHERE pseudo = '" + pseudo + "';";
 			
 			try {
 				this.statement.executeUpdate(query);

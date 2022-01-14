@@ -18,6 +18,9 @@ public class HomePage {
 	private final JButton changePseudo = new JButton("Change pseudo");
 	private final JButton deconnexion = new JButton("Quit");
 	
+	static boolean visible = true;
+	private boolean changePseudoExists = false;
+	
 	public HomePage() {
 		// Creation de la fenetre
 		homePageFrame = new JFrame("Messagerie | Home page");
@@ -32,14 +35,30 @@ public class HomePage {
 		// Set settings and deconnexion buttons
 		deconnexion.setBounds(500, 70, 150, 70);
 		deconnexion.setBackground(new Color(240,75,55));
+		deconnexion.addActionListener(
+				new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						Manager.stopApp();
+						homePageFrame.setVisible(false);
+						System.exit(0);
+					}
+				});
 		
 		changePseudo.setBounds(500, 350, 150, 70);
 		changePseudo.setBackground(new Color(0,204,136));
 		changePseudo.addActionListener(
         		new ActionListener() {
         			public void actionPerformed(ActionEvent e) {
-        				new ChangePseudo();
-			    		homePageFrame.setVisible(false);
+        				if (!changePseudoExists) {
+        					visible = false;
+            				homePageFrame.setVisible(visible);
+            				new ChangePseudo();
+        					changePseudoExists = true;
+        				} else {
+        					ChangePseudo.changePseudoVisible = true;
+            				visible = false;
+            				homePageFrame.setVisible(visible);
+        				}
         			}
         		});	
 		
@@ -58,7 +77,7 @@ public class HomePage {
 		homePagePanel.add(changePseudo);
 				
 		homePageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		homePageFrame.setVisible(true);
+		homePageFrame.setVisible(visible);
 	}
 	
 	public JButton addBtnUser(String pseudo, int n) {
