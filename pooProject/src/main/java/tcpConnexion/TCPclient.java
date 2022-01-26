@@ -5,16 +5,17 @@ import java.net.*;
 import java.util.*;
 
 import user.User;
+// client envoie à ouvrir quand qqn veut envoyer
 
-public class TCPclient {
+public class TCPclient extends Thread{
 	// demande clavardage
 	// port 5000 utilise pour la demande de clavardage
-	public static void demandeClavardage(InetAddress distantAddress, User localUser) {
+	public static void demandeClavardage(InetAddress distantAddress, User distantUser) {
 		try {
-			Socket client = new Socket(localUser.add, 5000);
+			Socket client = new Socket(distantUser.add, 5000);
 			
 			PrintWriter out = new PrintWriter(client.getOutputStream());
-			out.println(localUser.pseudo + " " + (localUser.add).getHostAddress());
+			out.println(distantUser.pseudo + " " + (distantUser.add).getHostAddress());
 			out.flush();
 			
 			client.close();			
@@ -26,10 +27,10 @@ public class TCPclient {
 	
 	// envoi messages
 	// port 5001 utilise pour la conversation
-	public static void conversationClavardage(InetAddress distantAddress, User localUser) {
+	public static void conversationClavardage(InetAddress distantAddress, User localUser, int localPort) {
 		try {
 			// declaration du socket client
-			Socket client = new Socket(localUser.add, 5001);	
+			Socket client = new Socket(localUser.add, localPort);	
 			
 			// out est le systeme permettant d'envoyer un segment
 			PrintWriter out = new PrintWriter(client.getOutputStream());
@@ -53,17 +54,39 @@ public class TCPclient {
 		}
 	}
 	
-	public static void main(String[] args) {
-		String testName = "toto";
-		User testUser;
-		InetAddress add;
+	public static void sendMessage(InetAddress distantAddress, User localUser, String msg) {
 		try {
-			add = InetAddress.getLocalHost();
-			testUser = User.initLocalUser(testName);
-			conversationClavardage(add, testUser);
+			Socket client = new Socket(localUser.add, 5001);
+			
+			DataOutputStream dout = new DataOutputStream(client.getOutputStream());
+			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+			
+			dout.writeUTF(msg);
+			
+			client.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public TCPclient() {
+		// User testUser;
+		// InetAddress add;
+		
+	}
+	
+	public void run( User distantUser, int localPort) {
+		try {
+			// add = InetAddress.getLocalHost();
+			// testUser = User.initLocalUser(testName);
+			sendMessage(distantUser.add, distantUser, "ça marche?");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
 	}
 }

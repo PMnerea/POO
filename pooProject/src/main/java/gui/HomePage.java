@@ -2,30 +2,38 @@ package gui;
 
 import javax.swing.*;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import Manager.Manager;
 
 public class HomePage {
 	
-	private JFrame homePageFrame; 
+	private static JFrame homePageFrame; 
 	private JPanel homePagePanel;
+	
+	private JScrollPane verticalPane;
 	
 	private final JLabel title = new JLabel("<html><font size='4' color=white>Chat with other users : </font></html>");
 	
 	private final JButton changePseudo = new JButton("Change pseudo");
 	private final JButton deconnexion = new JButton("Quit");
 	
-	static boolean visible = true;
-	private boolean changePseudoExists = false;
+	static SelectChatWindow SCW = new SelectChatWindow();;
+	
+	//private boolean changePseudoExists = false;
 	
 	public HomePage() {
 		// Creation de la fenetre
 		homePageFrame = new JFrame("Messagerie | Home page");
 		homePagePanel = new JPanel();
+		homePagePanel.setPreferredSize(new Dimension(400, 140));
 		homePagePanel.setBackground(new Color(60,70,70));
+		verticalPane = new JScrollPane(homePagePanel, // component
+				   JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, // vertical bar
+				   JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); // assuming you only need 
+		homePageFrame.getContentPane().add(verticalPane);
 		homePageFrame.setSize(700, 500);
 		homePageFrame.add(homePagePanel);
 		
@@ -33,57 +41,42 @@ public class HomePage {
 		title.setBounds(250, 10, 200, 30);
 		
 		// Set settings and deconnexion buttons
-		deconnexion.setBounds(500, 70, 150, 70);
+		deconnexion.setBounds(450, 100, 150, 70);
 		deconnexion.setBackground(new Color(240,75,55));
 		deconnexion.addActionListener(
 				new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						Manager.stopApp();
-						homePageFrame.setVisible(false);
 						System.exit(0);
 					}
 				});
 		
-		changePseudo.setBounds(500, 350, 150, 70);
+		changePseudo.setBounds(100, 100, 150, 70);
 		changePseudo.setBackground(new Color(0,204,136));
 		changePseudo.addActionListener(
         		new ActionListener() {
         			public void actionPerformed(ActionEvent e) {
-        				if (!changePseudoExists) {
-        					visible = false;
-            				homePageFrame.setVisible(visible);
-            				new ChangePseudo();
-        					changePseudoExists = true;
-        				} else {
-        					ChangePseudo.changePseudoVisible = true;
-            				visible = false;
-            				homePageFrame.setVisible(visible);
-        				}
+            			homePageFrame.setVisible(false);
+            			SCW.frame.setVisible(false);
+            			new ChangePseudo();
         			}
-        		});	
+        		});
 		
-		// Gerer l'affichage d'un bouton par utilisateur connecte
-		ArrayList<String> listPseudos = Manager.getAllUsersConnected();
-		for(int i=1; i<listPseudos.size(); i++) {
-			JButton aux = addBtnUser(listPseudos.get(i), i);
-			homePagePanel.add(aux);
-		}
-		
+		homePagePanel.add(verticalPane);
 		// Add all objects and setup the frame
 		homePagePanel.setBorder(BorderFactory.createEmptyBorder(150, 200, 150, 200));
 		homePagePanel.setLayout(null);
 		homePagePanel.add(title);
 		homePagePanel.add(deconnexion);
 		homePagePanel.add(changePseudo);
-				
+		
 		homePageFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		homePageFrame.setVisible(visible);
+		homePageFrame.setVisible(true);
 	}
 	
-	public JButton addBtnUser(String pseudo, int n) {
-		JButton userBtn = new JButton(pseudo);
-		userBtn.setBounds(0, n*70, 150, 70);
-		return userBtn;
+	public static void closeHomePage() {
+		SCW.frame.setVisible(false);
+		homePageFrame.setVisible(false);
 	}
 	
 	public static void main(String[] args) {

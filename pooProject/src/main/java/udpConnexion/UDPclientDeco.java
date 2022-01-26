@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.SocketException;
 
-import Manager.Manager;
+import manager.Manager;
 import reseau.Reseau;
 import user.User;
 

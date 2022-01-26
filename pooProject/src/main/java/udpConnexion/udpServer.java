@@ -3,7 +3,7 @@ package udpConnexion;
 import java.io.*; 
 import java.net.*;
 import java.util.ArrayList;
-import Manager.Manager; 
+import manager.Manager; 
 
 public class udpServer extends Thread {
 	
@@ -65,6 +65,7 @@ public class udpServer extends Thread {
 				if (connexion.equals("deconnection") && allUsers.contains(pseudo)) {
 					deleteUserDB(pseudo);
 					Manager.stopServers();
+					System.out.println("Deconnecteeeeeeeeeeeeeeee");
 				}
 				
 				pseudo = "";

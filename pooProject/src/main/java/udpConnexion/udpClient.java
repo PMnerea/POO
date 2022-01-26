@@ -2,7 +2,7 @@ package udpConnexion;
 
 import java.io.IOException;
 import java.net.*;
-import Manager.Manager;
+import manager.Manager;
 import reseau.Reseau;
 import user.User;
 
