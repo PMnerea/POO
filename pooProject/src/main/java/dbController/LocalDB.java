@@ -92,6 +92,8 @@ public class LocalDB {
 		}
 		
 		// ============================== DELETE ==============================
+		
+		// Delete one user by his pseudo
 		public void deleteUser(String pseudo) {
 			System.out.println("[LocalDB] Deleting user...");
 			
@@ -100,6 +102,22 @@ public class LocalDB {
 			try {
 				this.statement.executeUpdate(query);
 				System.out.println("[LocalDB] User deleted");
+				System.out.println(" ================================= ");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		// Delete all user
+		public void deleteAllUser() {
+			System.out.println("[LocalDB] Deleting all users...");
+			
+			String query = "DELETE FROM users;";
+			
+			try {
+				this.statement.executeUpdate(query);
+				System.out.println("[LocalDB] All users deleted");
 				System.out.println(" ================================= ");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -198,11 +216,11 @@ public class LocalDB {
 		
 		// ============================ UPDATE ================================
 		
-		// Update pseudo given an id
-		public void updatePseudo(int id, String newPseudo) {
+		// Update pseudo given a pseudo
+		public void updatePseudo(String pseudo, String newPseudo) {
 			System.out.println("[LocalDB] Updating pseudo...");
 			
-			String query = "UPDATE users SET pseudo = '" + newPseudo + "' WHERE idUser = " + id + ";";
+			String query = "UPDATE users SET pseudo = '" + newPseudo + "' WHERE pseudo = '" + pseudo + "';";
 			
 			try {
 				this.statement.executeUpdate(query);
@@ -242,7 +260,7 @@ public class LocalDB {
 				InetAddress resIp = localDB.getUserByPseudo("juju");
 				System.out.println(resPseudo);
 				System.out.println(resIp);
-				localDB.updatePseudo(8, "koko");
+				localDB.updatePseudo("toto", "koko");
 				localDB.updateIp(8, add);
 				//localDB.deleteUser("dede");
 				ArrayList<String> pseudos = localDB.getAllPseudos();
