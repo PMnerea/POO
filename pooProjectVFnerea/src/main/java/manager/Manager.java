@@ -215,20 +215,5 @@ public class Manager {
 	
 	public static void main(String[] args) {
 		
-		/*
-		runRequestManager();
-		Scanner s = new Scanner(System.in);
-		
-		while (true) {
-			String ip = s.next();
-			// "10.1.5.145
-
-			// "10.1.5.146
-
-			// "10.1.5.147
-
-			requestConversation(ip);
-			*/
-		
 	}
 }
