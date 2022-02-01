@@ -39,6 +39,8 @@ public class Manager {
 	}
 	
 	public static void stopApp() {
+		runUDPdeco();
+		
 		deleteAllUsersFromDB();
 		
 		stopServers();
