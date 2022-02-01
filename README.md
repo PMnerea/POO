@@ -27,5 +27,8 @@ RUNNING THE APP FROM THE SOURCE CODE
 - Go to pooProjectVFnerea/src/main/java/gui/Login.java
 - Run Login.java as java application
 
+WARNING
+- Close the app with the "Quit" button on the homepage
+
 NB! At the moment the application uses a database only accessible from the GEI network at INSA, and storing or reading previous
 messages will only be possible when connected to this network. 
