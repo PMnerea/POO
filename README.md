@@ -2,7 +2,7 @@
 
 HOW TO USE THE APP
 
-- Download chatApp.jar, and save it in a folder where you have permissions
+- Download chatApp.jar and pooProjectVFnerea, and save it in a folder where you have permissions
 - Change it's properties so that it is executable, for example using the following command: 
   chmod 777 chatApp.jar
 - Run the file using OpenJDK java 11 Runtime and the application will be opened. 
