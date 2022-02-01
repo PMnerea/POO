@@ -17,4 +17,11 @@ In order to communicate with other users through this application, you should be
 It is required that the users of this chat application have their own proper computers that they connect from every time. 
 By running the application from another computer than your own, you will be considered as a new user by the system, 
   and you will not be able to access your previous chats and conversations. It is also required that the computers on the 
-  network do not change IP addresses. 
+  network do not change IP addresses.
+  
+  
+RUNNING THE APP FROM THE SOURCE CODE
+
+- Open the project in Eclipse for Java Developers
+- Go to pooProjectVFnerea/src/main/java/gui/Login.java
+- Run Login.java as java application
