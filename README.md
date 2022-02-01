@@ -23,5 +23,9 @@ By running the application from another computer than your own, you will be cons
 RUNNING THE APP FROM THE SOURCE CODE
 
 - Open the project in Eclipse for Java Developers
+- Import the project to your workspace as an existing maven project
 - Go to pooProjectVFnerea/src/main/java/gui/Login.java
 - Run Login.java as java application
+
+NB! At the moment the application uses a database only accessible from the GEI network at INSA, and storing or reading previous
+messages will only be possible when connected to this network. 
